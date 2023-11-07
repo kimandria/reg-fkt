@@ -13,7 +13,7 @@
        <div class="container">
         @yield('content')
        </div>
-    <script src="{{ asset('master/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ asset('master/js/jquery-3.7.6.min.js')}}"></script>
+    <script src="{{ asset('master/js/bootstrap.bundle.min.js')}}"></script>
 </body>
 </html>

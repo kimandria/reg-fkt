@@ -18,17 +18,8 @@
             {{ Session::put('message', null) }}
         </div>
     @endif
-    <div class="container">
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <h1 class="m-0">Prefecture</h1>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
-        <hr>
+                <h1 style="text-align: center">Prefecture</h1>
+                        <hr>
         <form action="{{ url('/prefecture_save') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
 

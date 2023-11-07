@@ -26,7 +26,10 @@
                     <a class="nav-link" href="{{url('borough')}}">Borough</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('fonkotany')}}">Fonkotany</a>
+                    <a class="nav-link" href="{{url('fonkotany')}}">Fokontany</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('register')}}">Register</a>
                 </li>
             </ul>
         </div>

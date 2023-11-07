@@ -19,6 +19,7 @@ Route::get('/prefecture', [NavController::class, 'prefecture']);
 Route::get('/district', [NavController::class, 'district']);
 Route::get('/borough', [NavController::class, 'borough']);
 Route::get('/fonkotany', [NavController::class, 'fonkotany']);
+Route::get('/register', [NavController::class, 'register']);
 
 //Prefecture
 Route::get('/show/{id}', [NavController::class, 'show']);
@@ -26,13 +27,6 @@ Route::post('/prefecture_save', [NavController::class, 'savepref']);
 Route::get('/edit/{id}', [NavController::class, 'edit']);
 Route::post('/prefecture', [NavController::class, 'update']);
 Route::get('/delete/{id}', [NavController::class, 'delete_pref']);
-
-//Prefecture API
-// Route::get('/api/prefectures', [NavController::class, 'prefecturelist']);
-// Route::get('/api/prefectures/{id}', [NavController::class, 'prefecturedetail']);
-// Route::post('/api/prefectures/', [NavController::class, 'addprefecture']);
-// Route::post('/api/prefecture/{id}', [NavController::class, 'updateprefecture']);
-// Route::get('/api/delete/{id}', [NavController::class, 'deleteprefecture']);
 
 //District
 Route::post('/district', [NavController::class, 'saveDistrict']);
@@ -54,3 +48,10 @@ Route::post('/fkt_save', [NavController::class, 'savefkt']);
 Route::get('/editfkt/{id}', [NavController::class, 'editfkt']);
 Route::post('/fkt_update', [NavController::class, 'updateFkt']);
 Route::get('/deletefkt/{id}', [NavController::class, 'delete_fkt']);
+
+//Register
+Route::post('/register_save', [NavController::class, 'addRegister']);
+Route::get('/register_list', [NavController::class, 'registerlist']);
+Route::get('/editRegister/{id}', [NavController::class, 'editRegister']);
+Route::post('/registerUpdate', [NavController::class, 'updateRegister']);
+Route::get('/deleteRegister/{id}', [NavController::class, 'deleteRegister']);

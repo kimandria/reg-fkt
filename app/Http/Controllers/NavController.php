@@ -8,6 +8,7 @@ use App\Models\Prefecture;
 use App\Models\District;
 use App\Models\Borough;
 use App\Models\Fokontany;
+use App\Models\Register;
 
 class NavController extends Controller
 {
@@ -36,6 +37,13 @@ class NavController extends Controller
         $boroughs = Borough::orderBy('name', 'asc')->get();
         return view('fonkotany', compact('fkt', 'boroughs'));
     }
+
+    public function register () {
+        $register = Register::all();
+        $fkts = Fokontany::orderBy('name', 'asc')->get();
+        return view('register', compact('register', 'fkts'));
+    }
+
  //--------------------------------------------------//------------------------------------------------
     //Prefecture function
     public function show($id) {
@@ -236,19 +244,92 @@ class NavController extends Controller
         Session::put('message', 'Fokontany deleted');
        return redirect('/fonkotany');
     }
+//===================================================/=\===============================================
+    //Register function
 
-//--------------------------------------------------//------------------------------------------------
+    public function addRegister(Request $request)
+{
+    try {
+        $register = new Register();
+        $register->num = $request->input('register_num');
+        $register->fokontany_id = $request->input('fkt_id');
+        $register->sector = $request->input('sector_name');
+        $register->numcarnet = $request->input('carnet_num');
+        $register->address = $request->input('adress');
+        $register->phonenum = $request->input('phone_num');
+        $register->email = $request->input('email_name');
+        $register->modified_at = $request->input('modified_name');
+        $register->origin_fokontany = $request->input('origin_name');
+        $register->arrival_date = $request->input('arrival_name');
+        $departureDate = $request->input('departure_name') ? $request->input('departure_name') : null;
+        $register->departure_date = $departureDate;
 
-    // ============================================================================
-    // API
-    // ============================================================================
 
-    // Prefectures
-    // public function prefecturelist() {
-    //     $prefectures = Prefecture::orderBy('name', 'asc')->get();
-    //     return response()->json($prefectures);
-    // }
+        $register->save();
+
+        Session::put('message', 'Register added successfully');
+
+        return redirect('/register_list');
+    } catch (\Exception $e) {
+        Session::put('error', 'Failed to add Register. Please fill all fields and select a Fokontany.');
+        return view('register');
+    }
+  }
+  public function registerlist() {
+    $register = Register::orderBy('num', 'asc')->paginate(6);
+    return view('registerlist', compact('register'));
+   }
+
+   public function editRegister($id) {
+    $register = Register::find($id);
+    $fkt = Fokontany::orderBy('name', 'asc')->get();
+    return view('editRegister', compact('register', 'fkt'));
+   }
+
+
+   public function updateRegister(Request $request) {
+    $request->validate([
+        $request->validate([
+            'register_num' => 'required',
+            'fkt_id' => 'required',
+            'sector_name' => 'required',
+            'carnet_num' => 'required',
+            'adress' => 'required',
+            'phone_num' => 'required',
+            'email_name' => 'required',
+            'modified_name' => 'required',
+            'origin_name' => 'required',
+            'arrival_name' => 'required',
+            'departure_name' => 'nullable'
+        ])
+    ]);
+
+    $register = Register::find($request->register_id);
+
+    if (!$register) {
+        return redirect('/registerlist')->with('error', 'Register not found');
+    }
+    $register->num = $request->input('register_num');
+    $register->fokontany_id = $request->input('fkt_id');
+    $register->sector = $request->input('sector_name');
+    $register->numcarnet = $request->input('carnet_num');
+    $register->address = $request->input('adress');
+    $register->phonenum = $request->input('phone_num');
+    $register->email = $request->input('email_name');
+    $register->modified_at = $request->input('modified_name');
+    $register->origin_fokontany = $request->input('origin_name');
+    $register->arrival_date = $request->input('arrival_name');
+    $register->departure_date = $request->input('departure_name');
+
+    $register->save();
+
+    Session::put('message', 'Register updated successfully');
+    return redirect('/register_list');
 }
+    public function deleteRegister($id) {
+        $register = Register::find($id);
+        $register->delete();
 
-
-
+        return redirect('/register_list')->with('message', 'Register deleted');
+    }
+}
