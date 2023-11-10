@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NavController;
-use App\Http\Controllers\PrefetController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +19,8 @@ Route::get('/prefecture', [NavController::class, 'prefecture']);
 Route::get('/district', [NavController::class, 'district']);
 Route::get('/borough', [NavController::class, 'borough']);
 Route::get('/fonkotany', [NavController::class, 'fonkotany']);
-Route::get('/register', [NavController::class, 'register']);
+Route::get('/citizens', [NavController::class, 'citizens']);
+Route::get('/book', [NavController::class, 'book']);
 
 //Prefecture
 Route::get('/show/{id}', [NavController::class, 'show']);
@@ -49,9 +50,14 @@ Route::get('/editfkt/{id}', [NavController::class, 'editfkt']);
 Route::post('/fkt_update', [NavController::class, 'updateFkt']);
 Route::get('/deletefkt/{id}', [NavController::class, 'delete_fkt']);
 
-//Register
-Route::post('/register_save', [NavController::class, 'addRegister']);
-Route::get('/register_list', [NavController::class, 'registerlist']);
-Route::get('/editRegister/{id}', [NavController::class, 'editRegister']);
-Route::post('/registerUpdate', [NavController::class, 'updateRegister']);
-Route::get('/deleteRegister/{id}', [NavController::class, 'deleteRegister']);
+//Citizens
+Route::post('/citizens_save', [NavController::class, 'addCitizen']);
+Route::get('/citizenslist', [NavController::class, 'citizenslist']);
+Route::get('/editcitizens/{id}', [NavController::class, 'editCitizens']);
+Route::post('/citizens_update', [NavController::class, 'updateCitizens']);
+Route::get('/deleteCitizens/{id}', [NavController::class, 'deleteCitizens']);
+
+//Book
+Route::post('/book_save', [NavController::class, 'addBook']);
+Route::get('/editbook/{id}', [NavController::class, 'editBook']);
+Route::post('/book_update', [NavController::class, 'updateBook']);

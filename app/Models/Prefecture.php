@@ -11,4 +11,9 @@ class Prefecture extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function districts()
+{
+    return $this->hasMany(District::class);
+}
 }

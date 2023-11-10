@@ -30,26 +30,28 @@
             {{ Session::put('error', null) }}
         </div>
     @endif
-    <h1 style="text-align: center">Register List</h1>
+    <h1 style="text-align: center">Citizens List</h1>
     <hr>
-    <table style="margin-left:260px; width: 55%;" class="table table-hover text-center">
+    <table style="width: 75%; margin-left:150px;" class="table table-hover text-center">
         <thead class="table-dark">
             <tr>
-                <th scope="col">Register Number</th>
-                <th scope="col">Sector</th>
+                <th scope="col">Name</th>
+                <th scope="col">Firstname</th>
+                <th scope="col">Birthdate</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($register as $item)
+            @foreach ($citizens as $item)
                 <tr>
-                    <td><a href="">{{ $item->num }}</a></td>
-                    <td>{{ $item->sector }}</td>
+                    <td><a href="">{{ $item->last_name }}</a></td>
+                    <td>{{ $item->first_name }}</td>
+                    <td>{{ $item->birth_date }}</td>
                     <td>
-                        <a href="/editRegister/{{ $item->id }}" class="link-dark"><i
+                        <a href="/editcitizens/{{$item ->id}}" class="link-dark"><i
                                 class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-                        <a href="/deleteRegister/{{ $item->id }}" class="link-dark"
-                            onclick="return confirm('Do you really want to delete this Register?')"><i
+                        <a href="/deleteCitizens/{{$item ->id}}" class="link-dark"
+                            onclick="return confirm('Do you really want to delete this Citizens?')"><i
                                 class="fa-solid fa-trash fs-5"></i></a>
                     </td>
                 </tr>
@@ -57,10 +59,9 @@
         </tbody>
     </table>
     <div style="margin-left: 500px">
-        @if ($register->count())
-            {{-- Pagination links --}}
-            {{ $register->links('pagination::bootstrap-4', ['class' => 'pagination']) }}
-        @endif
+         @if ($citizens->count())
+             {{ $citizens->links('pagination::bootstrap-4', ['class' => 'pagination']) }}
+            @endif
     </div>
-    <a href="/register" class="btn btn-danger" style="margin-top: 10px; margin-left:360px; width:35%;">Cancel</a>
+    <a href="/citizens" class="btn btn-danger" style="margin-top: 10px; margin-left:360px; width:35%;">Cancel</a>
 @endsection

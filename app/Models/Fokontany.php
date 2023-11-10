@@ -17,4 +17,8 @@ class Fokontany extends Model
     {
         return $this->belongsTo(Borough::class, 'borough_id');
     }
+    public function books()
+{
+    return $this->hasMany(Book::class, 'fokontany_id');
+}
 }

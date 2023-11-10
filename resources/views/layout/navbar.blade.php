@@ -29,7 +29,10 @@
                     <a class="nav-link" href="{{url('fonkotany')}}">Fokontany</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('register')}}">Register</a>
+                    <a class="nav-link" href="{{url('citizens')}}">Citizens</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('book')}}">Book</a>
                 </li>
             </ul>
         </div>

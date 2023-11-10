@@ -8,7 +8,9 @@ use App\Models\Prefecture;
 use App\Models\District;
 use App\Models\Borough;
 use App\Models\Fokontany;
-use App\Models\Register;
+use App\Models\Citizens;
+use App\Models\Book;
+use App\Models\Child;
 
 class NavController extends Controller
 {
@@ -38,17 +40,34 @@ class NavController extends Controller
         return view('fonkotany', compact('fkt', 'boroughs'));
     }
 
-    public function register () {
-        $register = Register::all();
-        $fkts = Fokontany::orderBy('name', 'asc')->get();
-        return view('register', compact('register', 'fkts'));
+    public function citizens () {
+        $citizens = Citizens::orderBy('last_name', 'asc')->paginate(6);
+        return view('citizens', compact('citizens'));
+    }
+    public function book () {
+        $book = Book::orderBy('first_head_id', 'asc')->paginate(2);
+        $fkt = Fokontany::orderBy('name', 'asc')->get();
+        $citizens = Citizens::orderBy('first_name', 'asc')->get();
+        return view('book', compact('book', 'fkt', 'citizens'));
     }
 
  //--------------------------------------------------//------------------------------------------------
     //Prefecture function
+    // public function show($id) {
+    //     $showpref = Prefecture::find($id);
+    //     return view('showpref')->with('showpref', $showpref);
+    // }
+
     public function show($id) {
-        $showpref = Prefecture::find($id);
-        return view('showpref')->with('showpref', $showpref);
+        $prefecture = Prefecture::find($id);
+        $districts = District::where('prefecture_id', $id)->get();
+        $boroughs = Borough::whereIn('district_id', $districts->pluck('id'))->get();
+        $fokontanies = Fokontany::whereIn('borough_id', $boroughs->pluck('id'))->get();
+
+        return view('showpref')->with('prefecture', $prefecture)
+                              ->with('districts', $districts)
+                              ->with('boroughs', $boroughs)
+                              ->with('fokontanies', $fokontanies);
     }
 
     public function savepref(Request $request) {
@@ -208,7 +227,7 @@ class NavController extends Controller
             $fkt->borough_id = $request->input('borough_id');
             $fkt->save();
 
-            Session::put('message', 'The Fokontany '.$request->borough_name.' was added with success');
+            Session::put('message', 'The Fokontany '.$request->fkt_name.' was added with success');
             return redirect('/fonkotany');
         } catch (\Exception $e) {
             Session::put('error', 'Failed to add Fokontany. Please fill all field and select a Borough.');
@@ -244,92 +263,157 @@ class NavController extends Controller
         Session::put('message', 'Fokontany deleted');
        return redirect('/fonkotany');
     }
-//===================================================/=\===============================================
-    //Register function
+  //------------------------------------------------------------------------------------------------
 
-    public function addRegister(Request $request)
-{
+  //Citizens function
+    public function addCitizen(Request $request){
     try {
-        $register = new Register();
-        $register->num = $request->input('register_num');
-        $register->fokontany_id = $request->input('fkt_id');
-        $register->sector = $request->input('sector_name');
-        $register->numcarnet = $request->input('carnet_num');
-        $register->address = $request->input('adress');
-        $register->phonenum = $request->input('phone_num');
-        $register->email = $request->input('email_name');
-        $register->modified_at = $request->input('modified_name');
-        $register->origin_fokontany = $request->input('origin_name');
-        $register->arrival_date = $request->input('arrival_name');
-        $departureDate = $request->input('departure_name') ? $request->input('departure_name') : null;
-        $register->departure_date = $departureDate;
+        $citizens = new Citizens();
+        $citizens->first_name = $request->input('firstname');
+        $citizens->last_name = $request->input('name');
+        $citizens->job = $request->input('job');
+        $citizens->nic_place = $request->input('nic_place');
+        $citizens->birth_date = $request->input('birth_date');
+        $citizens->birth_place = $request->input('birth_place');
+        $citizens->father = $request->input('father');
+        $citizens->mother = $request->input('mother');
+        $citizens->email = $request->input('email');
+        $citizens->phone_num = $request->input('phone_num');
+        $citizens->nic_num = $request->input('cin');
+        $citizens->nic_date = $request->input('nic_date');
 
+        $citizens->save();
 
-        $register->save();
+        Session::put('message', 'Citizens added successfully');
 
-        Session::put('message', 'Register added successfully');
-
-        return redirect('/register_list');
+        return redirect('/citizenslist');
     } catch (\Exception $e) {
-        Session::put('error', 'Failed to add Register. Please fill all fields and select a Fokontany.');
-        return view('register');
+        Session::put('error', 'Failed to add Citizens.');
+        return view('citizens');
     }
   }
-  public function registerlist() {
-    $register = Register::orderBy('num', 'asc')->paginate(6);
-    return view('registerlist', compact('register'));
-   }
-
-   public function editRegister($id) {
-    $register = Register::find($id);
-    $fkt = Fokontany::orderBy('name', 'asc')->get();
-    return view('editRegister', compact('register', 'fkt'));
-   }
-
-
-   public function updateRegister(Request $request) {
+   public function updateCitizens(Request $request) {
     $request->validate([
         $request->validate([
-            'register_num' => 'required',
-            'fkt_id' => 'required',
-            'sector_name' => 'required',
-            'carnet_num' => 'required',
-            'adress' => 'required',
+            'firstname' => 'required',
+            'name' => 'required',
+            'job' => 'required',
+            'nic_place' => 'required',
+            'birth_date' => 'required',
             'phone_num' => 'required',
-            'email_name' => 'required',
-            'modified_name' => 'required',
-            'origin_name' => 'required',
-            'arrival_name' => 'required',
-            'departure_name' => 'nullable'
+            'email' => 'required',
+            'birth_place' => 'required',
+            'father' => 'required',
+            'mother' => 'required',
+            'cin' => 'required',
+            'nic_date' => 'required'
         ])
     ]);
 
-    $register = Register::find($request->register_id);
+    $citizens = Citizens::find($request->id);
 
-    if (!$register) {
-        return redirect('/registerlist')->with('error', 'Register not found');
+    if (!$citizens) {
+        return redirect('/citizenslist')->with('error', 'Citizens not found');
     }
-    $register->num = $request->input('register_num');
-    $register->fokontany_id = $request->input('fkt_id');
-    $register->sector = $request->input('sector_name');
-    $register->numcarnet = $request->input('carnet_num');
-    $register->address = $request->input('adress');
-    $register->phonenum = $request->input('phone_num');
-    $register->email = $request->input('email_name');
-    $register->modified_at = $request->input('modified_name');
-    $register->origin_fokontany = $request->input('origin_name');
-    $register->arrival_date = $request->input('arrival_name');
-    $register->departure_date = $request->input('departure_name');
+    $citizens->first_name = $request->input('firstname');
+    $citizens->last_name = $request->input('name');
+    $citizens->job = $request->input('job');
+    $citizens->nic_place = $request->input('nic_place');
+    $citizens->birth_date = $request->input('birth_date');
+    $citizens->father = $request->input('father');
+    $citizens->email = $request->input('email');
+    $citizens->mother = $request->input('mother');
+    $citizens->phone_num = $request->input('phone_num');
+    $citizens->nic_num = $request->input('cin');
+    $citizens->nic_date = $request->input('nic_date');
+    $citizens->birth_place = $request->input('birth_place');
 
-    $register->save();
+    $citizens->save();
 
-    Session::put('message', 'Register updated successfully');
-    return redirect('/register_list');
-}
-    public function deleteRegister($id) {
-        $register = Register::find($id);
-        $register->delete();
+    Session::put('message', 'Citizens updated successfully');
+    return redirect('/citizenslist');
+  }
+  public function editCitizens($id) {
+    $citizens = Citizens::find($id);
+    return view('editcitizens', compact('citizens'));
+   }
+   public function citizenslist() {
+    $citizens = Citizens::paginate(5);
+    return view('citizenslist', compact('citizens'));
+   }
+    public function deleteCitizens($id) {
+        $citizens = Citizens::find($id);
+        $citizens->delete();
 
-        return redirect('/register_list')->with('message', 'Register deleted');
+        return redirect('/citizenslist')->with('message', 'Citizens deleted');
     }
-}
+
+
+//--------------------------------------------------------------------------------------------------
+//Book function
+ public function addBook(Request $request) {
+    try {
+        $book = new Book();
+        $book->num = $request->input('book_num');
+        $book->fokontany_id = $request->input('fkt_id');
+        $book->first_head_id = $request->input('first_head_id');
+        $book->second_head_id = $request->input('second_head_id');
+        $book->save();
+
+        Session::put('message', 'The Book number '.$request->book_num.' was added with success');
+        return redirect('/book');
+    } catch (\Exception $e) {
+        Session::put('error', 'Failed to add Book. Please try again and select a name.');
+        return redirect('/book');
+    }
+  }
+
+     public function editBook($id) {
+         $book = Book::find($id);
+         $fkt = Fokontany::orderBy('name', 'asc')->get();
+         $citizens = Citizens::orderBy('first_name', 'asc')->get();
+        return view('editbook', compact('book', 'fkt', 'citizens'));
+     }
+
+     public function updateBook(Request $request) {
+        $book = Book::find($request->id);
+
+        if (!$book) {
+            Session::put('error', 'Le livre spécifié est introuvable');
+            return redirect('/book');
+        }
+
+        $book->num = $request->input('book_num');
+        $book->fokontany_id = $request->input('fkt_id');
+        $book->first_head_id = $request->input('first_head_id');
+        $book->second_head_id = $request->input('second_head_id');
+        $book->save();
+
+        if (!empty($request->input('selectedChildrenIds'))) {
+            $childrenIds = json_decode($request->input('selectedChildrenIds'));
+
+            foreach ($childrenIds as $childId) {
+                $validatedChildId = intval($childId);
+
+                $citizen = Citizens::find($validatedChildId);
+
+                if ($citizen) {
+                    $child = new Child();
+                    $child->book_id = $book->id;
+                    $child->citizen_id = $validatedChildId;
+                    $child->save();
+                } else {
+                    Session::put('error', 'L\'ID de l\'enfant '.$validatedChildId.' n\'est pas valide');
+                    return redirect('/book');
+                }
+            }
+        } else {
+            Session::put('error', 'Aucun enfant n\'a été sélectionné');
+            return redirect('/book');
+        }
+
+        Session::put('message', 'Le numéro de livre '.$request->book_num.' a été mis à jour avec succès');
+        return redirect('/book');
+    }
+ }
+
