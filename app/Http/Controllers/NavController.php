@@ -11,6 +11,7 @@ use App\Models\Fokontany;
 use App\Models\Citizens;
 use App\Models\Book;
 use App\Models\Child;
+use App\Models\Movement;
 
 class NavController extends Controller
 {
@@ -50,13 +51,14 @@ class NavController extends Controller
         $citizens = Citizens::orderBy('first_name', 'asc')->get();
         return view('book', compact('book', 'fkt', 'citizens'));
     }
+    public function movement () {
+        $movement = Movement::orderBy('book_id', 'asc')->get();
+        $book = Book::orderBy('num', 'asc')->get();
+        $fkt = Fokontany::orderBy('name', 'asc')->get();
+        return view('movement', compact('movement', 'book', 'fkt'));
+    }
 
  //--------------------------------------------------//------------------------------------------------
-    //Prefecture function
-    // public function show($id) {
-    //     $showpref = Prefecture::find($id);
-    //     return view('showpref')->with('showpref', $showpref);
-    // }
 
     public function show($id) {
         $prefecture = Prefecture::find($id);
@@ -351,6 +353,7 @@ class NavController extends Controller
 
 //--------------------------------------------------------------------------------------------------
 //Book function
+
  public function addBook(Request $request) {
     try {
         $book = new Book();
@@ -379,7 +382,7 @@ class NavController extends Controller
         $book = Book::find($request->id);
 
         if (!$book) {
-            Session::put('error', 'Le livre spécifié est introuvable');
+            Session::put('error', 'book not found');
             return redirect('/book');
         }
 
@@ -389,6 +392,10 @@ class NavController extends Controller
         $book->second_head_id = $request->input('second_head_id');
         $book->save();
 
+        if($request->input('selectedChildrenIds') == null) {
+            Session::put('message', 'The book number ' .$request->book_num. ' updated with success');
+            return redirect('/book');
+        }
         if (!empty($request->input('selectedChildrenIds'))) {
             $childrenIds = json_decode($request->input('selectedChildrenIds'));
 
@@ -403,17 +410,105 @@ class NavController extends Controller
                     $child->citizen_id = $validatedChildId;
                     $child->save();
                 } else {
-                    Session::put('error', 'L\'ID de l\'enfant '.$validatedChildId.' n\'est pas valide');
+                    Session::put('error', 'the child id '.$validatedChildId.' is not valide');
                     return redirect('/book');
                 }
             }
         } else {
-            Session::put('error', 'Aucun enfant n\'a été sélectionné');
+            Session::put('error', 'please select a child');
             return redirect('/book');
         }
 
-        Session::put('message', 'Le numéro de livre '.$request->book_num.' a été mis à jour avec succès');
+        Session::put('message', 'The book number ' .$request->book_num. ' updated with success');
         return redirect('/book');
+    }
+        //i want to delete a book and all children in this book
+    public function deleteBookChildren($id) {
+        $book = Book::find($id);
+
+        if (!$book) {
+            Session::put('error', 'book not found');
+            return redirect('/book');
+        }
+        $children = Child::where('book_id', $book->id)->get();
+        foreach ($children as $child) {
+            $child->delete();
+        }
+        $book->delete();
+        Session::put('message', 'book deleted');
+        return redirect('/book');
+    }
+//--------------------------------------------------------------------------------------------------
+//Movement function
+    public function addMovement(Request $request) {
+        try {
+            $movement = new Movement();
+            $movement->book_id = $request->input('book_id');
+            $movement->from_fkt_id = $request->input('fokontany_id');
+            $movement->to_fkt_id = $request->input('fkt_id');
+            $movement->pending = $request->input('pending');
+            $movement->departure_date = $request->input('departure_date');
+            $movement->arrival_date = $request->input('arrival_date');
+            $movement->save();
+
+            Session::put('message', 'The movement was added with success');
+            return redirect('/movement');
+        } catch (\Exception $e) {
+            Session::put('error', 'Failed to add movement. Please try again and select a name.');
+            return redirect('/movement');
+        }
+    }
+    public function updateMovement(Request $request) {
+        $request->validate([
+            'book_id' => 'required',
+            'fokontany_id' => 'required',
+            'fkt_id' => 'required',
+            'departure_date' => 'required',
+            'arrival_date' => 'required',
+        ]);
+
+        $movement = Movement::find($request->movement_id);
+
+        if (!$movement) {
+
+            Session::put('error', 'Movement not found');
+            return redirect('/movementlist');
+        }
+
+        $movement->book_id = $request->input('book_id');
+        $movement->from_fkt_id = $request->input('fokontany_id');
+        $movement->to_fkt_id = $request->input('fkt_id');
+        $movement->pending = $request->input('pending');
+        $movement->departure_date = $request->input('departure_date');
+        $movement->arrival_date = $request->input('arrival_date');
+        $movement->save();
+
+        Session::put('message', 'The movement was updated with success');
+        return redirect('/movementlist');
+    }
+    //i want to delete a movement
+    public function deleteMovement($id) {
+        $movement = Movement::find($id);
+
+        if (!$movement) {
+            Session::put('error', 'Movement not found');
+            return redirect('/movementlist');
+        }
+
+        $movement->delete();
+        Session::put('message', 'Movement deleted');
+        return redirect('/movementlist');
+    }
+
+    public function movementlist() {
+        $movement = Movement::paginate(5);
+        return view('movementlist', compact('movement'));
+    }
+    public function editMovement($id) {
+        $movement = Movement::find($id);
+        $book = Book::orderBy('num', 'asc')->get();
+        $fkt = Fokontany::orderBy('name', 'asc')->get();
+        return view('editmovement', compact('movement', 'book', 'fkt'));
     }
  }
 

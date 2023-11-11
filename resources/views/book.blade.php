@@ -97,7 +97,7 @@
                 <td>
                     <a href="/editbook/{{ $item->id }}" class="link-dark"><i
                             class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-                    <a href="" class="link-dark"
+                    <a href="/deleteBook/{{ $item->id }}" class="link-dark"
                         onclick="return confirm('Do you really want to delete this Book?')"><i
                             class="fa-solid fa-trash fs-5"></i></a>
                 </td>

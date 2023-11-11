@@ -34,6 +34,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('book')}}">Book</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('movement')}}">Movement</a>
+                </li>
             </ul>
         </div>
     </div>

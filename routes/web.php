@@ -21,6 +21,7 @@ Route::get('/borough', [NavController::class, 'borough']);
 Route::get('/fonkotany', [NavController::class, 'fonkotany']);
 Route::get('/citizens', [NavController::class, 'citizens']);
 Route::get('/book', [NavController::class, 'book']);
+Route::get('/movement', [NavController::class, 'movement']);
 
 //Prefecture
 Route::get('/show/{id}', [NavController::class, 'show']);
@@ -61,3 +62,11 @@ Route::get('/deleteCitizens/{id}', [NavController::class, 'deleteCitizens']);
 Route::post('/book_save', [NavController::class, 'addBook']);
 Route::get('/editbook/{id}', [NavController::class, 'editBook']);
 Route::post('/book_update', [NavController::class, 'updateBook']);
+Route::get('/deleteBook/{id}', [NavController::class, 'deleteBookChildren']);
+
+//Movement
+Route::post('/movement_save', [NavController::class, 'addMovement']);
+Route::get('/movementlist', [NavController::class, 'movementlist']);
+Route::get('/editmovement/{id}', [NavController::class, 'editMovement']);
+Route::post('/movement_update', [NavController::class, 'updateMovement']);
+Route::get('/deleteMovement/{id}', [NavController::class, 'deleteMovement']);

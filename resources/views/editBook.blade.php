@@ -61,7 +61,7 @@
         <div class="dropdown" style="display: inline-block; margin-left:60px;">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="firstDropdown"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                -- Select Name --
+                Select Name
             </button>
             <div class="dropdown-menu"
                 style="max-height: 200px; overflow-y: auto; background-color: #d3e0de; color: #010407;"
@@ -80,7 +80,7 @@
         <div class="dropdown" style="display: inline-block; margin-left:38px;">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="secondDropdown"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                -- Select Name --
+                Select Name
             </button>
             <div class="dropdown-menu"
                 style="max-height: 200px; overflow-y: auto; background-color: #d3e0de; color: #010407;"
@@ -99,7 +99,7 @@
         <div class="dropdown" style="display: inline-block; margin-left:71px;">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="childrenDropdown"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                -- Select Names --
+                Select Names
             </button>
             <div class="dropdown-menu"
                 style="max-height: 200px; overflow-y: auto; background-color: #d3e0de; color: #010407;"
