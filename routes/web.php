@@ -14,7 +14,7 @@ use App\Http\Controllers\NavController;
 |
 */
 //Navigation
-Route::get('/', [NavController::class, 'index']);
+Route::get('/index', [NavController::class, 'index']);
 Route::get('/prefecture', [NavController::class, 'prefecture']);
 Route::get('/district', [NavController::class, 'district']);
 Route::get('/borough', [NavController::class, 'borough']);
@@ -70,3 +70,9 @@ Route::get('/movementlist', [NavController::class, 'movementlist']);
 Route::get('/editmovement/{id}', [NavController::class, 'editMovement']);
 Route::post('/movement_update', [NavController::class, 'updateMovement']);
 Route::get('/deleteMovement/{id}', [NavController::class, 'deleteMovement']);
+
+//login
+Route::get('/', [NavController::class, 'login']);
+Route::get('/signup', [NavController::class, 'signup']);
+Route::post('/create_account', [NavController::class, 'createAccount']);
+Route::post('/login', [NavController::class, 'loginAccount']);

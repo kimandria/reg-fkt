@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Prefecture;
@@ -12,6 +13,7 @@ use App\Models\Citizens;
 use App\Models\Book;
 use App\Models\Child;
 use App\Models\Movement;
+use App\Models\Cli;
 
 class NavController extends Controller
 {
@@ -58,6 +60,62 @@ class NavController extends Controller
         return view('movement', compact('movement', 'book', 'fkt'));
     }
 
+//login function
+    public function login() {
+        return view('login');
+    }
+
+    public function loginAccount(Request $request) {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:8',
+            ]);
+
+            $cli = Cli::where('email', $request->input('email'))->first();
+            if (!$cli) {
+                return redirect('/')->with('error', 'Email not found. Please use a different email.');
+            }
+
+            if (!password_verify($request->input('password'), $cli->password)) {
+                return redirect('/')->with('error', 'Password is incorrect. Please try again.');
+            }
+
+            Session::put('user', $cli);
+
+            return redirect('/index')->with('message', 'Login successful');
+        } catch (QueryException $e) {
+            return redirect('/')->with('error', 'An error occurred while logging in.');
+        }
+
+
+    }
+//sign up
+    public function signup() {
+        return view('signup');
+    }
+    public function createAccount(Request $request) {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:8',
+            ]);
+            $cli = new Cli();
+            $existingUser = Cli::where('email', $request->input('email'))->first();
+            if ($existingUser) {
+                return redirect('/signup')->with('error', 'Email already exists. Please use a different email.');
+            }
+
+            $cli = new Cli();
+            $cli->email = $request->input('email');
+            $cli->password = bcrypt($request->input('password'));
+            $cli->save();
+
+            return redirect('/')->with('message', 'Account created successfully');
+        } catch (QueryException $e) {
+            return redirect('/signup')->with('error', 'An error occurred while creating the account.');
+        }
+    }
  //--------------------------------------------------//------------------------------------------------
 
     public function show($id) {
