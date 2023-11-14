@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -13,15 +14,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('fkt_id')->nullable()->references('id')->on('fokontany');
+            $table->integer('borough_id')->nullable()->references('id')->on('boroughs');
+            $table->integer('district_id')->nullable()->references('id')->on('districts');
+            $table->integer('prefecture_id')->nullable()->references('id')->on('prefectures');
+            $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

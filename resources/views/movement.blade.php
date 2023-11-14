@@ -99,7 +99,7 @@
     <input type="hidden" name="fokontany_id" id="fokontanyID">
     <input type="hidden" name="fkt_id" id="fkt_Id">
     <div>
-        <button type="submit" class="btn btn-danger" style="margin-top:50px; margin-left:400px; width:30%">Add Fokontany</button>
+        <button type="submit" class="btn btn-danger" style="margin-top:50px; margin-left:400px; width:30%">Add Movement</button>
     </div>
  </form>
  <script>

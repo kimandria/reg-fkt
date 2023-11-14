@@ -23,6 +23,7 @@ class Citizens extends Model
         'job',
         'landlord',
     ];
+
     public function fokontany()
 
     {
@@ -50,3 +51,7 @@ class Citizens extends Model
     }
 
 }
+//     public function fokontanies()
+// {
+//     return $this->belongsTo(Fokontany::class);
+// }

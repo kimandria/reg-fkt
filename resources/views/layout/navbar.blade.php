@@ -40,18 +40,6 @@
                         <a class="dropdown-item" href="{{ url('fonkotany') }}">Fokontany</a>
                     </div>
                 </li>
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="{{url('prefecture')}}">Prefecture</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url('district')}}">District</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url('borough')}}">Borough</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url('fonkotany')}}">Fokontany</a>
-                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('citizens')}}">Citizens</a>
                 </li>

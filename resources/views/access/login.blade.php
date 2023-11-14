@@ -131,8 +131,8 @@ body {
             @csrf
 
            <div class="form-control">
-                <input type="text" name="email" required>
-                <label>Email</label>
+                <input type="text" name="username" required>
+                <label>Name</label>
            </div>
 
            <div class="form-control">
@@ -141,7 +141,6 @@ body {
            </div>
 
            <button class="btn">Login</button>
-           <p class="text">Don't have an account? <a href="/signup">Sign Up</a></p>
         </form>
     </div>
     <script>
