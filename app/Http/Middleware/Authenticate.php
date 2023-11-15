@@ -23,7 +23,44 @@ class Authenticate extends Middleware
         $user = User::find($userId);
 
         if ($user) {
-            if ($user->isAdmin() || $user->fkt_id || $user->borough_id || $user->district_id || $user->prefecture_id) {
+            // The index route should redirect to the user's default route
+            // if (!$request->segment(1)) {
+            //     if ($user->isAdmin()) {
+            //         return redirect('/admin/users');
+            //     } else if ($user->fkt_id) {
+            //         return redirect('/fokontany');
+            //     } else if ($user->borough_id) {
+            //         return redirect('/boroughs');
+            //     } else if ($user->district_id) {
+            //         return redirect('/districts');
+            //     } else if ($user->prefecture_id) {
+            //         return redirect('/prefectures');
+            //     }
+            // }
+
+            // Admin is allowed access to all routes except the ones below
+            if ($user->isAdmin()
+                && $request->segment(1) != 'fokontany'
+                && $request->segment(1) != 'boroughs'
+                && $request->segment(1) != 'districts'
+                && $request->segment(1) != 'prefectures')
+            {
+                return $next($request);
+            }
+
+            if ($user->fkt_id && $request->segment(1) == 'fokontany') {
+                return $next($request);
+            }
+
+            if ($user->borough_id && $request->segment(1) == 'boroughs') {
+                return $next($request);
+            }
+
+            if ($user->district_id && $request->segment(1) == 'districts') {
+                return $next($request);
+            }
+
+            if ($user->prefecture_id && $request->segment(1) == 'prefectures') {
                 return $next($request);
             }
 

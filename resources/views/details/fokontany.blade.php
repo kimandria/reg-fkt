@@ -8,26 +8,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $fokontany->name }} Overview</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
+    <a href="{{ url()->previous() }}" class="btn btn-secondary" style="margin-left: 500px; margin-top:10px; width:25%;">Cancel</a>
     <div class="container">
         <h1>{{ $fokontany->name }}</h1>
         <p>Number of citizens: {{ $fokontany->num_citizens }}</p>
         <p>Number of movements: {{ $fokontany->num_movements }}</p>
 
         <h2>Citizens</h2>
-        <table class="table">
-            <thead>
+        <table class="table text-center">
+            <thead class="table-dark">
                 <tr>
-                    <th>First name</th>
-                    <th>Last name</th>
-                    <th>Birthdate</th>
-                    <th>Birth place</th>
-                    <th>Family head</th>
-                    <th>Family 2nd head</th>
-                    <th># NIC</th> <!-- National Identity Card -->
-                    <th>Job</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Birthdate</th>
+                    <th scope="col">Birth place</th>
+                    <th scope="col">Family head</th>
+                    <th scope="col">Family 2nd head</th>
+                    <th scope="col"># NIC</th> <!-- National Identity Card -->
+                    <th scope="col">Job</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,8 +39,6 @@
                     <td>{{ $citizen['last_name'] }}</td>
                     <td>{{ $citizen['birth_date'] }}</td>
                     <td>{{ $citizen['birth_place'] }}</td>
-                    {{-- <td>{{ Citizens::find($citizen['father'])->first_name }} {{ Citizens::find($citizen['father'])->last_name }}</td>
-                    <td>{{ Citizens::find($citizen['mother'])->first_name }} {{ Citizens::find($citizen['mother'])->last_name }}</td> --}}
                     <td>{{ $citizen['father'] }}</td>
                     <td>{{ $citizen['mother'] }}</td>
                     <td>{{ $citizen['nic_num'] }}</td>
@@ -64,7 +64,12 @@
                 @foreach($fokontany->arrivals as $arrival)
                 <tr>
                     <td>Arrival</td>
-                    <td>{{ $arrival->citizen->first_name }} {{ $arrival->citizen->last_name }}</td>
+                    <td>
+                @if($arrival->citizen)
+                    {{ $arrival->citizen->first_name }} {{ $arrival->citizen->last_name }}
+                @else
+                    N/A
+                @endif</td>
                     <td>{{ $arrival->from_fkt_name }}</td>
                     <td>{{ $arrival->to_fkt_name }}</td>
                     <td>{{ $arrival->date }}</td>
@@ -74,7 +79,11 @@
                 @foreach($fokontany->departures as $departure)
                 <tr>
                     <td>Departure</td>
-                    <td>{{ $departure->citizen->first_name }} {{ $departure->citizen->last_name }}</td>
+                    <td> @if($departure->citizen)
+                        {{ $departure->citizen->first_name }} {{ $departure->citizen->last_name }}
+                    @else
+                        N/A
+                    @endif</td>
                     <td>{{ $departure->from_fkt_name }}</td>
                     <td>{{ $departure->to_fkt_name }}</td>
                     <td>{{ $departure->date }}</td>
@@ -84,6 +93,5 @@
             </tbody>
         </table>
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

@@ -14,12 +14,6 @@
         .card {
             margin-top: 50px;
         }
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            margin-top: 50px;
-        }
     .btn-danger:hover {
         background-color: #00b33c;
         border:none;
@@ -52,16 +46,18 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-success text-white">Create User</div>
+                    <div class="card-header bg-success text-white">Edit User {{ $user->username }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="/admin/createuser">
+                        <form method="POST" action="/admin/edituser">
                             @csrf
+
+                            <input id="id" type="hidden" name="id" value="{{ $user->id }}">
 
                             <div class="form-group row">
                                 <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
                                 <div class="col-md-6">
-                                    <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                                    <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ $user->username }}" required autocomplete="username" autofocus>
                                     @error('username')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -73,7 +69,7 @@
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" required autocomplete="email">
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -97,7 +93,7 @@
                             <div class="form-group row">
                                 <label for="is_admin" class="col-md-4 col-form-label text-md-right">Is Admin</label>
                                 <div class="col-md-6">
-                                    <input id="is_admin" type="checkbox" class="form-control @error('is_admin') is-invalid @enderror" name="is_admin" value="1" {{ old('is_admin') ? 'checked' : '' }}>
+                                    <input id="is_admin" type="checkbox" class="form-control @error('is_admin') is-invalid @enderror" name="is_admin" value="1" {{ $user->is_admin ? 'checked' : '' }}>
                                     @error('is_admin')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -177,7 +173,7 @@
                             <div class="form-group row mb-0">
                                 {{-- <div class="col-md-8 offset-md-4"> --}}
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-danger">Create</button>
+                                    <button type="submit" class="btn btn-danger">Save</button>
                                     <a href="/admin/users" class="btn btn-danger">Cancel</a>
                                 </div>
                             </div>

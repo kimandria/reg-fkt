@@ -6,9 +6,47 @@
 <head>
     <title>{{ $district->name }} Overview</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1, h2 {
+            color: #007bff;
+        }
+
+        .lead {
+            font-size: 1.2em;
+            color: #343a40;
+        }
+
+        .list-group-item {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .list-group-item a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .list-group-item a:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body>
+    <button style="margin-top:10px; margin-left:500px; width:25%;"><a href="logout">Log Out</a></button>
     <div class="container">
         <h1 class="display-4">{{ $district->name }}</h1>
         <p class="lead">Total number of boroughs: {{ $district->num_boroughs }}</p>

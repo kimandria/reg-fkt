@@ -94,6 +94,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'showUsers']);
     Route::get('/admin/createuser', [AdminController::class, 'showCreateUserForm']);
     Route::post('/admin/createuser', [AdminController::class, 'createUser']);
+    Route::get('/admin/edituser/{id}', [AdminController::class, 'showEditUserForm']);
+    Route::post('/admin/edituser', [AdminController::class, 'editUser']);
+    Route::get('/admin/deleteuser/{id}', [AdminController::class, 'deleteUser']);
 
     //-----------------Prefecture User-----------------
     Route::get('/prefectures', [PrefectureUserController::class, 'index']);
@@ -112,6 +115,25 @@ Route::middleware(['auth'])->group(function () {
 
     //-----------------Fokontany User-----------------
     Route::get('/fokontany', [FokontanyUserController::class, 'index']);
+    Route::post('/fokontany/citizens', [FokontanyUserController::class, 'addCitizens']);
+    Route::post('/fokontany/citizens/update', [FokontanyUserController::class, 'updateCitizens']);
+    Route::get('/fokontany/citizens/edit/{id}', [FokontanyUserController::class, 'editcitizens']);
+    Route::get('/fokontany/citizens/delete/{id}', [FokontanyUserController::class, 'deletecitizens']);
+    Route::get('/fokontany/citizens', [FokontanyUserController::class, 'listcitizens']);
+    Route::get('/fokontany/book', [FokontanyUserController::class, 'Book']);
+    Route::post('/fokontany/book', [FokontanyUserController::class, 'addBook']);
+    Route::get('/fokontany/book/edit/{id}', [FokontanyUserController::class, 'editBook']);
+    Route::post('/fokontany/book/update', [FokontanyUserController::class, 'updateBook']);
+    Route::get('/fokontany/book/delete/{id}', [FokontanyUserController::class, 'deleteBook']);
+    Route::get('/fokontany/movement', [FokontanyUserController::class, 'showMovement']);
+    Route::post('/fokontany/movement', [FokontanyUserController::class, 'addMovement']);
+    Route::get('/fokontany/movement/edit/{id}', [FokontanyUserController::class, 'editMovement']);
+    Route::get('/fokontany/movement/list', [FokontanyUserController::class, 'listMovement']);
+    Route::post('/fokontany/movement/update', [FokontanyUserController::class, 'updateMovement']);
+    Route::get('/fokontany/movement/delete/{id}', [FokontanyUserController::class, 'deleteMovement']);
 });
+
+// Redirect / to /index
+Route::redirect('/', '/login');
 
 Route::get('debug', [DebugController::class, 'index']);

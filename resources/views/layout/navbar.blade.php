@@ -15,6 +15,7 @@
     .navbar-light .navbar-nav .nav-item .dropdown-menu a.active {
         color: #e6eee9;
     }
+
 </style>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #00b33c;">
     <div class="container">
@@ -48,6 +49,15 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('movement')}}">Movement</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('admin/users')}}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url('logout')}}"><i class="fas fa-power-off" style="color: #000000;
+                    margin-top: 5px; margin-left: 85px; font-size: 30px;"
+                        ></i>
+                    </a>
                 </li>
             </ul>
         </div>
