@@ -12,10 +12,16 @@
 </head>
 
 <body>
+    <div class="mt-3">
+        <a href="{{ url()->previous() }}" class="btn btn-primary" style="margin-left: 500px; width:25%;">Cancel</a>
+    </div>
+    <br>
     <div class="container">
-        <h1 class="display-4">{{ $borough->name }}</h1>
-        <p class="lead">Total number of fokontany: {{ $borough->num_fokontany }}</p>
-        <h2 class="mt-5">List of fokontany:</h2>
+        <div class="jumbotron">
+            <h1 class="display-4">{{ $borough->name }} Overview</h1>
+            <p class="lead">Total number of fokontany: {{ $borough->num_fokontany }}</p>
+        </div>
+       <h2 class="mt-5">List of fokontany:</h2>
         <ul class="list-group">
             @foreach ($borough->fokontany as $fokontany)
                 <li class="list-group-item"><a href="/{{ $path }}/fokontany/{{ $fokontany->id }}">{{ $fokontany->name }}</a></li>

@@ -18,6 +18,12 @@
             {{ Session::put('message', null) }}
         </div>
     @endif
+    @if (Session::has('error'))
+        <div class="alert alert-danger" role="combobox">
+            {{ Session::get('error') }}
+            {{ Session::put('error', null) }}
+        </div>
+    @endif
                 <h1 style="text-align: center">Prefecture</h1>
                         <hr>
         <form action="{{ url('/prefecture_save') }}" method="POST" class="form-horizontal">

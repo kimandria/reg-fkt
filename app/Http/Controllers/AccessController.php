@@ -30,11 +30,11 @@ class AccessController extends Controller
 
             $user = User::where('username', $request->input('username'))->first();
             if (!$user) {
-                return redirect('/')->with('error', 'Username not found. Please contact DSI.');
+                return redirect('/login')->with('error', 'Username not found. Please contact DSI.');
             }
 
             if (!password_verify($request->input('password'), $user->password)) {
-                return redirect('/')->with('error', 'Password is incorrect. Please try again.');
+                return redirect('/login')->with('error', 'Password is incorrect. Please try again.');
             }
 
             // Set a cookie with the user's ID
@@ -72,3 +72,4 @@ class AccessController extends Controller
         return redirect('/login')->cookie($cookie);
     }
 }
+

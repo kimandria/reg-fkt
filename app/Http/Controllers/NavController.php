@@ -144,9 +144,14 @@ class NavController extends Controller
 
     public function delete_pref($id)
     {
-        $prefet = Prefecture::find($id);
-        $prefet->delete();
-        Session::put('message', 'prefecture deleted');
+        try {
+            $prefet = Prefecture::find($id);
+            $prefet->delete();
+            Session::put('message', 'prefecture deleted');
+        } catch (\Exception $e) {
+            Session::put('error', 'Failed to delete the prefecture. Please try again later.');
+        }
+
         return redirect('/prefecture');
     }
 
@@ -238,9 +243,13 @@ class NavController extends Controller
     }
     public function delete_dist($id)
     {
-        $district = District::find($id);
-        $district->delete();
-        Session::put('message', 'District deleted');
+        try {
+            $district = District::find($id);
+            $district->delete();
+            Session::put('message', 'District deleted');
+        } catch (\Exception $e) {
+            Session::put('error', 'Failed to delete the district');
+        }
         return redirect('/district');
     }
     //Borough function
@@ -324,10 +333,15 @@ class NavController extends Controller
 
     public function delete_borough($id)
     {
-        $borough = Borough::find($id);
-        $borough->delete();
-        Session::put('message', 'Borough deleted');
-        return redirect('/borough');
+        try {
+            $borough = Borough::find($id);
+            $borough->delete();
+            Session::put('message', 'Borough deleted');
+            return redirect('/borough');
+        } catch (\Exception $e) {
+            Session::put('error', 'Failed to delete borough');
+            return redirect('/borough');
+        }
     }
     //Fokontany Function
     public function showfkt($id)
@@ -412,10 +426,18 @@ class NavController extends Controller
 
     public function delete_fkt($id)
     {
-        $fkt = Fokontany::find($id);
-        $fkt->delete();
-        Session::put('message', 'Fokontany deleted');
-        return redirect('/fonkotany');
+        try {
+            $fkt = Fokontany::find($id);
+            if (!$fkt) {
+                throw new \Exception('Fokontany not found');
+            }
+            $fkt->delete();
+            Session::put('message', 'Fokontany deleted');
+            return redirect('/fonkotany');
+        } catch (\Exception $e) {
+            Session::put('error', 'Failed to delete Fokontany: ' . $e->getMessage());
+            return redirect('/fonkotany');
+        }
     }
     //Citizens function
     public function addCitizen(Request $request)
@@ -499,10 +521,14 @@ class NavController extends Controller
     }
     public function deleteCitizens($id)
     {
-        $citizens = Citizens::find($id);
-        $citizens->delete();
+        try {
+            $citizens = Citizens::find($id);
+            $citizens->delete();
 
-        return redirect('/citizenslist')->with('message', 'Citizens deleted');
+            return redirect('/citizenslist')->with('message', 'Citizens deleted');
+        } catch (\Exception $e) {
+            return redirect('/citizenslist')->with('error', 'Failed to delete Citizens.');
+        }
     }
 
 
@@ -581,21 +607,26 @@ class NavController extends Controller
     }
     //i want to delete a book and all children in this book
     public function deleteBookChildren($id)
-    {
-        $book = Book::find($id);
+{
+    try {
+        $book = Book::findOrFail($id);
 
-        if (!$book) {
-            Session::put('error', 'book not found');
-            return redirect('/book');
-        }
         $children = Child::where('book_id', $book->id)->get();
+
         foreach ($children as $child) {
             $child->delete();
         }
+
         $book->delete();
-        Session::put('message', 'book deleted');
+
+        Session::put('message', 'Book and associated children deleted successfully');
+        return redirect('/book');
+    } catch (\Exception $e) {
+        Session::put('error', 'An error occurred while deleting the book and his children');
+        // You can log the exception or handle it as needed
         return redirect('/book');
     }
+}
     //Movement function
     public function addMovement(Request $request)
     {
@@ -647,16 +678,22 @@ class NavController extends Controller
     }
     public function deleteMovement($id)
     {
-        $movement = Movement::find($id);
+        try {
+            $movement = Movement::find($id);
 
-        if (!$movement) {
-            Session::put('error', 'Movement not found');
+            if (!$movement) {
+                Session::put('error', 'Movement not found');
+                return redirect('/movementlist');
+            }
+
+            $movement->delete();
+            Session::put('message', 'Movement deleted');
+            return redirect('/movementlist');
+        } catch (\Exception $e) {
+            Session::put('error', 'An error occurred while deleting the movement');
+            // You can log the exception or handle it as needed
             return redirect('/movementlist');
         }
-
-        $movement->delete();
-        Session::put('message', 'Movement deleted');
-        return redirect('/movementlist');
     }
 
     public function movementlist()
